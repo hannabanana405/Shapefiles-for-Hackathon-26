@@ -24,7 +24,7 @@ Every feature has its code in both `id` and `properties.GEOID`. Counties also ca
 `lib/cmb-map.js` is the heatmap engine used by the Cotality Heatmap Skill. A generated heatmap is a small HTML file that sets `window.CMB_MAP` (title, map level, metrics, and one row of totals per area) and then loads:
 
 ```
-https://cdn.jsdelivr.net/gh/hannabanana405/Shapefiles-for-Hackathon-26@v1.1.0/lib/cmb-map.js
+https://cdn.jsdelivr.net/gh/hannabanana405/Shapefiles-for-Hackathon-26@v1.1.1/lib/cmb-map.js
 ```
 
 The renderer loads the boundaries it needs from this repo (same release), matches county names and ZIP codes, and draws the map with a legend, tooltips, rankings, search, a data check, and PNG/CSV export. It has no other dependencies.
