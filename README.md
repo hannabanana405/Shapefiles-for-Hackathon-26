@@ -11,7 +11,7 @@ All geometry comes from U.S. Census Bureau cartographic boundary files, which ar
 | `v1/state.geojson` | 50 states, DC, Puerto Rico (Census 2023, 1:20m) | 2-digit state FIPS |
 | `v1/county.geojson` | 3,235 counties and equivalents (Census 2023, 1:500k, simplified) | 5-digit county FIPS |
 | `v1/cbsa.geojson` | 935 metropolitan and micropolitan areas (Census 2023, 1:500k, simplified) | 5-digit CBSA code |
-| `v1/zcta/{STATEFP}.geojson` | ZIP Code Tabulation Areas, one file per state (Census 2020, 1:500k, simplified) | 5-digit ZCTA |
+| `zcta/{STATEFP}.geojson` | ZIP Code Tabulation Areas, one file per state (Census 2020, 1:500k, simplified) | 5-digit ZCTA |
 | `v1/lookups/state_fips.json` | State FIPS, postal abbreviation, and name | |
 | `v1/lookups/county_names.json` | `{ "NJ": { "OCEAN": "34029", ... } }` normalized county name → FIPS, by state | |
 | `v1/lookups/county_cbsa.json` | County FIPS → CBSA code (OMB July 2023 delineation) | |
@@ -19,13 +19,23 @@ All geometry comes from U.S. Census Bureau cartographic boundary files, which ar
 
 Every feature has its code in both `id` and `properties.GEOID`. Counties also carry `NAME`, `NAMELSAD`, `STATEFP`, and `STUSPS`. ZCTAs carry `COUNTY` and `STATEFP`, and each ZCTA appears in exactly one state file (the state of its center county).
 
+## Map renderer
+
+`lib/cmb-map.js` is the heatmap engine used by the Cotality Heatmap Skill. A generated heatmap is a small HTML file that sets `window.CMB_MAP` (title, map level, metrics, and one row of totals per area) and then loads:
+
+```
+https://cdn.jsdelivr.net/gh/hannabanana405/Shapefiles-for-Hackathon-26@v1.1.0/lib/cmb-map.js
+```
+
+The renderer loads the boundaries it needs from this repo (same release), matches county names and ZIP codes, and draws the map with a legend, tooltips, rankings, search, a data check, and PNG/CSV export. It has no other dependencies.
+
 ## Using the files
 
 URL pattern (always pin a release tag so shared maps keep working):
 
 ```
 https://cdn.jsdelivr.net/gh/hannabanana405/Shapefiles-for-Hackathon-26@v1.0.0/v1/county.geojson
-https://cdn.jsdelivr.net/gh/hannabanana405/Shapefiles-for-Hackathon-26@v1.0.0/v1/zcta/34.geojson
+https://cdn.jsdelivr.net/gh/hannabanana405/Shapefiles-for-Hackathon-26@v1.0.0/zcta/34.geojson
 ```
 
 Coordinates are WGS84 longitude/latitude (unprojected), rounded to 4 decimals. Exterior rings are clockwise and holes counter-clockwise, which is what D3 expects. Use a projection, for example:
