@@ -11,23 +11,24 @@ All geometry comes from U.S. Census Bureau cartographic boundary files, which ar
 | `v1/state.geojson` | 50 states, DC, Puerto Rico (Census 2023, 1:20m) | 2-digit state FIPS |
 | `v1/county.geojson` | 3,235 counties and equivalents (Census 2023, 1:500k, simplified) | 5-digit county FIPS |
 | `v1/cbsa.geojson` | 935 metropolitan and micropolitan areas (Census 2023, 1:500k, simplified) | 5-digit CBSA code |
+| `tract/{STATEFP}.geojson` | Census tracts, one file per state (Census 2023 cartographic file, 2020 tract definitions, 1:500k, simplified) | 11-digit tract GEOID |
 | `zcta/{STATEFP}.geojson` | ZIP Code Tabulation Areas, one file per state (Census 2020, 1:500k, simplified) | 5-digit ZCTA |
 | `v1/lookups/state_fips.json` | State FIPS, postal abbreviation, and name | |
 | `v1/lookups/county_names.json` | `{ "NJ": { "OCEAN": "34029", ... } }` normalized county name → FIPS, by state | |
 | `v1/lookups/county_cbsa.json` | County FIPS → CBSA code (OMB July 2023 delineation) | |
 | `v1/lookups/zcta_county.json` | ZCTA → county FIPS (the county containing the ZCTA's center) | |
 
-Every feature has its code in both `id` and `properties.GEOID`. Counties also carry `NAME`, `NAMELSAD`, `STATEFP`, and `STUSPS`. ZCTAs carry `COUNTY` and `STATEFP`, and each ZCTA appears in exactly one state file (the state of its center county).
+Every feature has its code in both `id` and `properties.GEOID`. Counties also carry `NAME`, `NAMELSAD`, `STATEFP`, and `STUSPS`. Tracts carry `NAME` (tract number), `COUNTY` (county name), and `STUSPS`. ZCTAs carry `COUNTY` and `STATEFP`, and each ZCTA appears in exactly one state file (the state of its center county).
 
 ## Map renderer
 
 `lib/cmb-map.js` is the heatmap engine used by the Cotality Heatmap Skill. A generated heatmap is a small HTML file that sets `window.CMB_MAP` (title, map level, metrics, and one row of totals per area) and then loads:
 
 ```
-https://cdn.jsdelivr.net/gh/hannabanana405/Shapefiles-for-Hackathon-26@v1.1.1/lib/cmb-map.js
+https://cdn.jsdelivr.net/gh/hannabanana405/Shapefiles-for-Hackathon-26@v1.2.0/lib/cmb-map.js
 ```
 
-The renderer loads the boundaries it needs from this repo (same release), matches county names and ZIP codes, and draws the map with a legend, tooltips, rankings, search, a data check, and PNG/CSV export. It has no other dependencies.
+The renderer loads the boundaries it needs from this repo (same release), matches county names and ZIP codes, and draws the map with a legend, tooltips, rankings, search, a data check, and PNG/CSV export. It has no other dependencies. If jsDelivr refuses a file, the renderer fetches the same release from raw.githubusercontent.com instead.
 
 ## Using the files
 
